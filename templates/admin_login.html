@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Euromove Admin Login</title>
+<style>
+body {
+  font-family: Arial, sans-serif; background:#f7f7f7;
+  display:flex; justify-content:center; align-items:center; height:100vh; margin:0;
+}
+.login-container {
+  background:white; padding:40px; border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2); width:320px;
+}
+h2 { text-align:center; color:#0057b7; margin-bottom:20px; }
+form { display:flex; flex-direction:column; gap:15px; }
+input { padding:10px; border-radius:5px; border:1px solid #ccc; }
+button {
+  padding:10px; border:none; border-radius:5px;
+  background:#0057b7; color:white; font-weight:bold; cursor:pointer;
+  transition:0.3s;
+}
+button:hover { background:#003f8a; }
+
+.flash { text-align:center; margin-bottom:10px; padding:10px; border-radius:5px; }
+.flash-success { background:#d4edda; color:#155724; }
+.flash-danger { background:#f8d7da; color:#721c24; }
+.forgot-link { text-align:right; font-size:0.9rem; margin-top:-10px; }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+<h2>Admin Login</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="post" action="{{ url_for('admin_login') }}">
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+</form>
+<div class="forgot-link">
+  <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: euromove
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn euromove:app

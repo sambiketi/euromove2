@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Euromove | Study and Work in Europe</title>
+<meta name="description" content="Euromove helps students and job seekers find study and work opportunities across Europe.">
+
+<style>
+/* ==== GLOBAL STYLES ==== */
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  margin: 0; padding: 0;
+  scroll-behavior: smooth;
+  background: radial-gradient(circle at center,
+              #ff5f7e 0%, #c964ff 35%, #4a78ff 70%, #ff3c4a 100%);
+  color: #fff;
+}
+
+/* ==== HEADER ==== */
+header {
+  background: transparent;
+  color: white;
+  text-align: center;
+  padding: 30px 20px;
+  position: relative;
+}
+
+header img.logo {
+  width: 50%; /* Increased width */
+  display: block;
+  margin: 0 auto 10px;
+}
+
+header h1 { margin: 0; font-size: 2rem; letter-spacing: 1px; }
+header p { margin: 5px 0 0 0; font-weight: 300; color: #f4f4f4; }
+
+/* ==== NAVIGATION ==== */
+nav {
+  display: flex; justify-content: center; gap: 10px;
+  flex-wrap: wrap; margin-top: 15px;
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px); padding: 10px; border-radius: 8px;
+}
+
+nav button {
+  background: #fff; color: #4a78ff; border: none;
+  padding: 10px 20px; margin: 5px; border-radius: 6px;
+  cursor: pointer; font-weight: 600; transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+nav button:hover {
+  background: linear-gradient(45deg, #ff5f7e, #4a78ff);
+  color: white; transform: translateY(-2px);
+}
+
+/* ==== SECTIONS ==== */
+section {
+  padding: 60px 20px; max-width: 1000px;
+  margin: 40px auto 0; background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px; backdrop-filter: blur(5px);
+}
+
+section h2 {
+  text-align: center; margin-bottom: 20px;
+  color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* ==== CARDS ==== */
+.story-card {
+  background: rgba(255, 255, 255, 0.15); padding: 20px;
+  margin: 15px 0; border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2); color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.story-card:hover { transform: translateY(-3px); }
+.story-card h3 { margin-top: 0; }
+.story-card small { display:block; margin-top:10px; color:#e0e0e0; }
+
+/* ==== FORMS ==== */
+form { display:flex; flex-direction:column; gap:10px; }
+input, select, textarea, button {
+  padding:10px; border-radius:6px; border:1px solid #ccc;
+  font-family: inherit;
+}
+
+input, select, textarea { background: rgba(255,255,255,0.9); color:#222; }
+
+button {
+  background: linear-gradient(45deg, #ff5f7e, #4a78ff);
+  color:white; font-weight:bold; cursor:pointer; border:none; transition:0.3s;
+}
+
+button:hover { transform: translateY(-2px); background: linear-gradient(45deg,#4a78ff,#ff5f7e); }
+
+/* ==== FOOTER ==== */
+footer {
+  background: rgba(0,0,0,0.8); color:white; text-align:center;
+  padding:20px; margin-top:40px; border-top:2px solid rgba(255,255,255,0.2);
+}
+
+/* ==== RESPONSIVE ==== */
+@media (max-width:600px){
+  header h1{font-size:1.5rem;}
+  section{padding:30px 15px;}
+  nav{flex-wrap:wrap; gap:5px;}
+  nav button{padding:8px 15px;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="{{ url_for('static', filename='img/' ~ logo_filename) }}" alt="Euromove Logo" class="logo">
+  <h1>Welcome to Euromove</h1>
+  <p>Study and work opportunities across Europe</p>
+  <nav>
+    <button data-target="#our-journey">Our Journey</button>
+    <button data-target="#student-programs">Our Current Programs</button>
+    <button data-target="#jobs">Jobs</button>
+    <button data-target="#contact">Contact / Info</button>
+    <button data-target="#faqs">FAQs</button>
+    <button data-target="#privacy">Privacy Policy</button>
+  </nav>
+</header>
+
+<section id="our-journey">
+<h2>Our Journey</h2>
+{% if admin_posts %}
+  {% for post in admin_posts %}
+  <div class="story-card">
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.content }}</p>
+    {% if post.image %}
+      <img src="{{ url_for('static', filename='uploads/' ~ post.image) }}" alt="{{ post.title }}" style="max-width:100%; border-radius:6px;">
+    {% endif %}
+    <small>Posted on {{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+  </div>
+  {% endfor %}
+{% else %}
+<p style="text-align:center;">No posts yet. Check back soon!</p>
+{% endif %}
+</section>
+
+<section id="student-programs">
+<h2>Apply for Programmes</h2>
+<form method="post" action="{{ url_for('submit_programme') }}">
+  <input type="text" name="name" placeholder="Your Name" required>
+  <input type="email" name="email" placeholder="Your Email" required>
+  <label for="programme">Select Programme:</label>
+  <select id="programme" name="programme">
+    {% for field, courses in programmes.items() %}
+    <option value="{{ field }}">{{ field }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="course">Select Course:</label>
+  <select id="course" name="course">
+    {% for course in programmes[programmes.keys()|list|first] %}
+    <option value="{{ course }}">{{ course }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Submit</button>
+</form>
+</section>
+
+<section id="jobs">
+<h2>Apply for Jobs</h2>
+<form method="post" action="{{ url_for('submit_job') }}">
+  <input type="text" name="name" placeholder="Your Name" required>
+  <input type="email" name="email" placeholder="Your Email" required>
+
+  <label for="job_field">Select Job Field:</label>
+  <select id="job_field" name="job_field">
+    {% for field, jobs_list in jobs.items() %}
+    <option value="{{ field }}">{{ field }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="job">Select Job:</label>
+  <select id="job" name="job">
+    {% for job in jobs[jobs.keys()|list|first] %}
+    <option value="{{ job }}">{{ job }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Submit</button>
+</form>
+</section>
+
+<section id="contact">
+<h2>Contact / Info</h2>
+<form method="post" action="{{ url_for('submit_question') }}">
+  <input type="text" name="name" placeholder="Your Name" required>
+  <input type="email" name="email" placeholder="Your Email" required>
+  <textarea name="question" rows="3" placeholder="Your Question" required></textarea>
+  <button type="submit">Send</button>
+</form>
+<p style="text-align:center;">Email: info@euromove.com | Phone: +123 456 7890</p>
+</section>
+
+<section id="faqs">
+<h2>FAQs</h2>
+{% for f in faqs %}
+<div class="story-card">
+  <p><strong>{{ f.user_name }} asks:</strong> {{ f.question_text }}</p>
+  <p><strong>Answer:</strong> {{ f.admin_answer or 'Pending...' }}</p>
+</div>
+{% endfor %}
+</section>
+
+<section id="privacy">
+<h2>Privacy Policy</h2>
+<p style="text-align:center;">We respect your privacy and protect your personal data. Your information will never be shared without consent.</p>
+</section>
+
+<footer>
+<p>© 2025 Euromove</p>
+</footer>
+
+<script>
+// Smooth scrolling
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = document.querySelector(btn.getAttribute('data-target'));
+    target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// Dynamic programme/course dropdown
+const programmeSelect = document.getElementById('programme');
+const courseSelect = document.getElementById('course');
+const programmeCourses = {{ programmes|tojson }};
+programmeSelect.addEventListener('change', function() {
+  const selected = this.value;
+  courseSelect.innerHTML='';
+  programmeCourses[selected].forEach(c=>{
+    const opt = document.createElement('option'); opt.value=c; opt.textContent=c;
+    courseSelect.appendChild(opt);
+  });
+});
+
+// Dynamic job/job field dropdown
+const jobFieldSelect = document.getElementById('job_field');
+const jobSelect = document.getElementById('job');
+const jobData = {{ jobs|tojson }};
+jobFieldSelect.addEventListener('change', function() {
+  const selected = this.value;
+  jobSelect.innerHTML='';
+  jobData[selected].forEach(j=>{
+    const opt = document.createElement('option'); opt.value=j; opt.textContent=j;
+    jobSelect.appendChild(opt);
+  });
+});
+</script>
+
+</body>
+</html>
