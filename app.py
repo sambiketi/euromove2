@@ -248,7 +248,7 @@ def reset_password(token):
     '''
 
 # ========== INIT DB ==========
-@app.before_first_request
+@app.before_request
 def create_tables():
     db.create_all()
     if not Admin.query.first():
