@@ -3,4 +3,4 @@ services:
     name: euromove
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn euromove:app
+    startCommand: gunicorn app:app
