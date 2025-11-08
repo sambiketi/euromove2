@@ -103,7 +103,16 @@ td img { max-width:100px; border-radius:5px; }
 </table>
 </div>
 </section>
-
+<section>
+  <form
+  action="{{url_for('upload_logo')}}"
+  method="POST" enctype="multipart/form-data">
+    <label>upload_logo:</label>
+    input type="file" name="logo"
+  accept="image/*" required>
+    <button type="submit">Upload</button>
+  </form>
+</section>
 <section>
 <h2>Respond to FAQs</h2>
 {% for f in faqs %}

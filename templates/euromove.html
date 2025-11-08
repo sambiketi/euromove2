@@ -115,7 +115,8 @@ footer {
 <body>
 
 <header>
-  <img src="{{ url_for('static', filename='img/' ~ logo_filename) }}" alt="Euromove Logo" class="logo">
+  <a
+  href="{{url_for('admin_dashboard') }}"><img src="{{ url_for('static', filename='img/' ~ logo_filename) }}" alt="Euromove Logo" class="logo"></a>
   <h1>Welcome to Euromove</h1>
   <p>Study and work opportunities across Europe</p>
   <nav>

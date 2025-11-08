@@ -230,6 +230,29 @@ def forgot_password():
         <button type="submit">Send Reset Link</button>
         </form>
     '''
+#Create upload logo route
+import os
+from flask import request, redirect, url_for, flash
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+ALLOWED_EXTENSIONS = {'png','jpeg','jpg','gif'}
+def allowed_file(filename):
+    return'.'in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
+@app.route('/upload_logo',
+methods=['POST'])
+def upload_logo():
+    file=request.files.get('logo')
+    if not file or file.filename == '':
+        flash('No file selected')
+        return redirect(request.referrer)
+    if not allowed_file(file.filename):
+        flash('invalid file type')
+        return redirect(request.referrer)
+        filename='site_logo.' + file.filename.rsplit('.',1)[1],lower()
+    upload_path = os.path.join(app.config['UPLOAD_FOLDER'],filename)
+    os.makedirs(app.config['UPLOAD_FOLDER'],exist_ok=True)
+    file.save(upload_path)
+    flash('logo uploaded succesfully')
+    return redirect(url_for('admin_dashboard'))
 
 @app.route('/admin/reset_password/<token>', methods=['GET','POST'])
 def reset_password(token):
