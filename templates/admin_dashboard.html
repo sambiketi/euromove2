@@ -107,8 +107,10 @@ td img { max-width:100px; border-radius:5px; }
   <form
   action="{{url_for('upload_logo')}}"
   method="POST" enctype="multipart/form-data">
-    <label>upload_logo:</label>
-    input type="file" name="logo"
+    <label for="upload_logo"
+      class="custom-file-label">Choose File
+    </label>
+    <input type="file" name="logo"
   accept="image/*" required>
     <button type="submit">Upload</button>
   </form>
