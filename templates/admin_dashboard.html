@@ -105,13 +105,13 @@ td img { max-width:100px; border-radius:5px; }
 </section>
 <section>
   <form
-  action="{{url_for('upload_logo')}}"
+  action="{{ url_for('upload_logo')}}"
   method="POST" enctype="multipart/form-data">
-    <label for="upload_logo"
-      class="custom-file-label">Choose File
-    </label>
-    <input type="file" name="logo"
-  accept="image/*" required>
+    <input type="file" id="file-upload"
+  name="file"hidden/>
+    <button type="button"
+id="choose-btn">Choose File</button>
+  <span id="file-name">No File Chosen</span>
     <button type="submit">Upload</button>
   </form>
 </section>
